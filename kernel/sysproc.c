@@ -91,3 +91,9 @@ uint64 sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+uint64 sys_halt(void)
+{
+  // To-DO: Implement the halt system call
+  return 0;
+}
