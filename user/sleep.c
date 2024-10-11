@@ -1,8 +1,10 @@
-/*
- * sleep.c - sleep for a specified number of seconds
- * Author: Chris Dedman
- * Date: 10/10/2024
- */
+/*************************************************************************
+* sleep.c - sleep for a specified number of seconds
+*
+* Author: Chris Dedman
+* Date: 10/10/2024
+*
+**************************************************************************/
 
 #include "kernel/types.h"
 #include "kernel/stat.h"
