@@ -55,8 +55,7 @@ struct cmd *parsecmd(char*);
 void runcmd(struct cmd*) __attribute__((noreturn));
 
 // Execute cmd.  Never returns.
-void
-runcmd(struct cmd *cmd)
+void runcmd(struct cmd *cmd)
 {
   int p[2];
   struct backcmd *bcmd;
@@ -65,57 +64,70 @@ runcmd(struct cmd *cmd)
   struct pipecmd *pcmd;
   struct redircmd *rcmd;
 
-  if(cmd == 0)
+  if (0 == cmd)
     exit(1);
 
-  switch(cmd->type){
+  switch (cmd->type)
+  {
   default:
+    fprintf(2, "runcmd: unknown command type %d\n", cmd->type);
     panic("runcmd");
 
   case EXEC:
-    ecmd = (struct execcmd*)cmd;
-    if(ecmd->argv[0] == 0)
+    ecmd = (struct execcmd *)cmd;
+    if (ecmd->argv[0] == 0)
       exit(1);
+
     exec(ecmd->argv[0], ecmd->argv);
     fprintf(2, "exec %s failed\n", ecmd->argv[0]);
     break;
 
   case REDIR:
-    rcmd = (struct redircmd*)cmd;
+    rcmd = (struct redircmd *)cmd;
     close(rcmd->fd);
-    if(open(rcmd->file, rcmd->mode) < 0){
+    if (open(rcmd->file, rcmd->mode) < 0)
+    {
       fprintf(2, "open %s failed\n", rcmd->file);
       exit(1);
     }
+
     runcmd(rcmd->cmd);
     break;
 
   case LIST:
-    lcmd = (struct listcmd*)cmd;
-    if(fork1() == 0)
+    lcmd = (struct listcmd *)cmd;
+    if (fork1() == 0)
       runcmd(lcmd->left);
+
     wait(0);
     runcmd(lcmd->right);
     break;
 
   case PIPE:
-    pcmd = (struct pipecmd*)cmd;
-    if(pipe(p) < 0)
+    pcmd = (struct pipecmd *)cmd;
+    if (pipe(p) < 0)
+    {
       panic("pipe");
-    if(fork1() == 0){
+    }
+
+    if (fork1() == 0)
+    {
       close(1);
       dup(p[1]);
       close(p[0]);
       close(p[1]);
       runcmd(pcmd->left);
     }
-    if(fork1() == 0){
+
+    if (fork1() == 0)
+    {
       close(0);
       dup(p[0]);
       close(p[0]);
       close(p[1]);
       runcmd(pcmd->right);
     }
+
     close(p[0]);
     close(p[1]);
     wait(0);
@@ -123,22 +135,43 @@ runcmd(struct cmd *cmd)
     break;
 
   case BACK:
-    bcmd = (struct backcmd*)cmd;
-    if(fork1() == 0)
+    bcmd = (struct backcmd *)cmd;
+    if (fork1() == 0)
+    {
       runcmd(bcmd->cmd);
+    }
+
     break;
   }
   exit(0);
 }
 
-int
-getcmd(char *buf, int nbuf)
+int getcmd(char *buf, int nbuf)
 {
-  write(2, "$ ", 2);
-  memset(buf, 0, nbuf);
-  gets(buf, nbuf);
-  if(buf[0] == 0) // EOF
+  write(2, "[eXv6]$ ", 8);  
+  memset(buf, 0, nbuf);  
+
+  // Read input, ensuring it fits within the buffer size
+  int n = read(0, buf, nbuf - 1);  // Leave space for null terminator
+
+  if (0 > n) {  // if read() failed
     return -1;
+  }
+
+  if (0 == n) {  // if EOF
+    return -1;
+  }
+
+  // Remove newline if present, and null-terminate the buffer
+  if (buf[n - 1] == '\n')
+  {
+    buf[n - 1] = '\0';
+  }
+  else
+  {
+    buf[n] = '\0';
+  }
+
   return 0;
 }
 
@@ -447,9 +480,10 @@ parseexec(char **ps, char *es)
 }
 
 // NUL-terminate all the counted strings.
-struct cmd*
-nulterminate(struct cmd *cmd)
+struct cmd * nulterminate(struct cmd *cmd)
 {
+  if (cmd == 0) return 0;
+
   int i;
   struct backcmd *bcmd;
   struct execcmd *ecmd;
@@ -457,38 +491,49 @@ nulterminate(struct cmd *cmd)
   struct pipecmd *pcmd;
   struct redircmd *rcmd;
 
-  if(cmd == 0)
-    return 0;
-
-  switch(cmd->type){
+  switch (cmd->type)
+  {
   case EXEC:
-    ecmd = (struct execcmd*)cmd;
-    for(i=0; ecmd->argv[i]; i++)
-      *ecmd->eargv[i] = 0;
+    ecmd = (struct execcmd *)cmd;
+    for (i = 0; ecmd->argv[i]; i++)
+    {
+      if (ecmd->eargv[i] == 0)
+      {
+        *ecmd->eargv[i] = 0;
+      }
+    }
     break;
 
   case REDIR:
-    rcmd = (struct redircmd*)cmd;
+    rcmd = (struct redircmd *)cmd;
     nulterminate(rcmd->cmd);
-    *rcmd->efile = 0;
+    if (rcmd->efile)
+    {
+      *rcmd->efile = 0;
+    }
     break;
 
   case PIPE:
-    pcmd = (struct pipecmd*)cmd;
+    pcmd = (struct pipecmd *)cmd;
     nulterminate(pcmd->left);
     nulterminate(pcmd->right);
     break;
 
   case LIST:
-    lcmd = (struct listcmd*)cmd;
+    lcmd = (struct listcmd *)cmd;
     nulterminate(lcmd->left);
     nulterminate(lcmd->right);
     break;
 
   case BACK:
-    bcmd = (struct backcmd*)cmd;
+    bcmd = (struct backcmd *)cmd;
     nulterminate(bcmd->cmd);
     break;
+
+  default:
+    fprintf(2, "nulterminate: unknown cmd type %d\n", cmd->type);
+    break;
   }
+
   return cmd;
 }
