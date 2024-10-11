@@ -62,19 +62,21 @@ bzero(int dev, int bno)
 
 // Allocate a zeroed disk block.
 // returns 0 if out of disk space.
-static uint
-balloc(uint dev)
+static uint balloc(uint dev)
 {
   int b, bi, m;
   struct buf *bp;
 
   bp = 0;
-  for(b = 0; b < sb.size; b += BPB){
+  for (b = 0; b < sb.size; b += BPB)
+  {
     bp = bread(dev, BBLOCK(b, sb));
-    for(bi = 0; bi < BPB && b + bi < sb.size; bi++){
+    for (bi = 0; bi < BPB && b + bi < sb.size; bi++)
+    {
       m = 1 << (bi % 8);
-      if((bp->data[bi/8] & m) == 0){  // Is block free?
-        bp->data[bi/8] |= m;  // Mark block in use.
+      if ((bp->data[bi / 8] & m) == 0)
+      {                        // Is block free?
+        bp->data[bi / 8] |= m; // Mark block in use.
         log_write(bp);
         brelse(bp);
         bzero(dev, b + bi);
@@ -88,18 +90,22 @@ balloc(uint dev)
 }
 
 // Free a disk block.
-static void
-bfree(int dev, uint b)
+static void bfree(int dev, uint b)
 {
   struct buf *bp;
   int bi, m;
 
   bp = bread(dev, BBLOCK(b, sb));
   bi = b % BPB;
-  m = 1 << (bi % 8);
-  if((bp->data[bi/8] & m) == 0)
+  m  = 1 << (bi % 8);
+
+  if ((bp->data[bi / 8] & m) == 0)
+  {
     panic("freeing free block");
-  bp->data[bi/8] &= ~m;
+  }
+
+  bp->data[bi / 8] &= ~m;
+  
   log_write(bp);
   brelse(bp);
 }
