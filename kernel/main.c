@@ -9,6 +9,7 @@ volatile static int started = 0;
 // start() jumps here in supervisor mode on all CPUs.
 void main()
 {
+  uint waitcyle[NCPU];
   if (cpuid() == 0)
   {
     consoleinit();
@@ -29,19 +30,20 @@ void main()
     fileinit();         // file table
     virtio_disk_init(); // emulated hard disk
     userinit();         // first user process
+    printf("\nhart %d started\n", cpuid());
     __sync_synchronize();
     started = 1;
   }
-
   else
   {
+    waitcyle[cpuid()] = 0;
     while (started == 0)
     {
-      ;
+      waitcyle[cpuid()]++;
     }
 
     __sync_synchronize();
-    printf("hart %d starting\n", cpuid());
+    printf("hart %d starting: wait cycle %d\n", cpuid(), waitcyle[cpuid()]);
     kvminithart();  // turn on paging
     trapinithart(); // install kernel trap vector
     plicinithart(); // ask PLIC for device interrupts
