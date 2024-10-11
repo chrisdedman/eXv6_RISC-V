@@ -1,7 +1,7 @@
 ## eXv6 RISC-V OS - A Learning Base for Operating Systems
 _eXv6 - Experimental Version 6_
 
-This is a fork of the xv6-riscv operating system, which is a re-implementation of the Unix Version 6 operating system for RISC-V. This project is intended to be used as a learning base for the Operating System class I am taking from my undergrad at California State University, Dominguez Hills. This project is not part of my class assignment, but rather a personal project to learn more about operating systems and [RISC-V](https://en.wikipedia.org/wiki/RISC-V) architecture.
+This is a fork of the [xv6-riscv](https://github.com/mit-pdos/xv6-riscv) operating system, which is a re-implementation of the Unix Version 6 operating system for RISC-V. This project is intended to be used as a learning base for the Operating System class I am taking from my undergrad at California State University, Dominguez Hills. This project is not part of my class assignment, but rather a personal project to learn more about operating systems and [RISC-V](https://en.wikipedia.org/wiki/RISC-V) architecture.
 
 ---
 This following lines below are kept from the original **README** file.
