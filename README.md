@@ -1,4 +1,7 @@
-This is a fork of the xv6-riscv operating system, which is a re-implementation of the Unix Version 6 operating system for RISC-V. This fork is intended to be used as a learning base for the OS class I am taking at the California State University, Dominguez Hills. This fork is not part of my class, but rather a personal project to learn more about operating systems.
+## eXv6 RISC-V OS - A Learning Base for Operating Systems
+_eXv6 - Experimental Version 6_
+
+This is a fork of the xv6-riscv operating system, which is a re-implementation of the Unix Version 6 operating system for RISC-V. This project is intended to be used as a learning base for the Operating System class I am taking from my undergrad at California State University, Dominguez Hills. This project is not part of my class assignment, but rather a personal project to learn more about operating systems and [RISC-V](https://en.wikipedia.org/wiki/RISC-V) architecture.
 
 ---
 This following lines below are kept from the original **README** file.
@@ -17,10 +20,6 @@ xv6 is inspired by John Lions's Commentary on UNIX 6th Edition (Peer
 to Peer Communications; ISBN: 1-57398-013-7; 1st edition (June 14,
 2000)).  See also https://pdos.csail.mit.edu/6.1810/, which provides
 pointers to on-line resources for v6.
-
-The following people have made contributions: Russ Cox (context switching,
-locking), Cliff Frey (MP), Xiao Yu (MP), Nickolai Zeldovich, and Austin
-Clements.
 ```
 
 BUILDING AND RUNNING XV6
