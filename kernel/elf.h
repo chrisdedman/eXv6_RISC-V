@@ -1,11 +1,11 @@
-/**
+/*****************************************************************
  * @file elf.h
  * @brief Format of an ELF executable file
  *
  * This header defines the structure and constants used to interpret
  * ELF (Executable and Linkable Format) files.
  *
- */
+ ****************************************************************/
 
 #define ELF_MAGIC 0x464C457FU // "\x7FELF" in little endian
 

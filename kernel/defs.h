@@ -6,7 +6,7 @@
  * function prototypes used throughout the kernel. The functions are grouped
  * by the source file they are implemented in.
  *
- */
+ ****************************************************************/
 
 struct buf;
 struct context;
