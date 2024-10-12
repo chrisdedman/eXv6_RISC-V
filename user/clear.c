@@ -1,8 +1,16 @@
-/*
- * clear.c - simple program to clear the screen using ANSI escape sequences
- * Author: Chris Dedman
- * Date: 10/10/2024
- */
+/***************************************************************************
+ *
+ * @file clear.c
+ * @brief A simple program to clear the terminal screen using ANSI escape sequences.
+ *
+ * This program defines a function `clear` that sends an ANSI escape sequence
+ * to the terminal to clear the screen and move the cursor to the home position.
+ * The `main` function calls this `clear` function and then exits.
+ *
+ * @author Chris Rollet
+ * @date 10/10/2024
+ *
+ **************************************************************************/
 
 #include "kernel/types.h"
 #include "kernel/stat.h"
