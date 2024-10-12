@@ -497,20 +497,14 @@ struct cmd * nulterminate(struct cmd *cmd)
     ecmd = (struct execcmd *)cmd;
     for (i = 0; ecmd->argv[i]; i++)
     {
-      if (ecmd->eargv[i] == 0)
-      {
-        *ecmd->eargv[i] = 0;
-      }
+      *ecmd->eargv[i] = 0;
     }
     break;
 
   case REDIR:
     rcmd = (struct redircmd *)cmd;
     nulterminate(rcmd->cmd);
-    if (rcmd->efile)
-    {
-      *rcmd->efile = 0;
-    }
+    *rcmd->efile = 0;
     break;
 
   case PIPE:
