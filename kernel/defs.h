@@ -1,4 +1,7 @@
-/*
+/*****************************************************************
+ * @file defs.h
+ * @brief Forward declarations of various structures and function prototypes
+ * 
  * This header file contains forward declarations of various structures and
  * function prototypes used throughout the kernel. The functions are grouped
  * by the source file they are implemented in.
