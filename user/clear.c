@@ -7,7 +7,7 @@
  * to the terminal to clear the screen and move the cursor to the home position.
  * The `main` function calls this `clear` function and then exits.
  *
- * @author Chris Rollet
+ * @author Chris Dedman
  * @date 10/10/2024
  *
  **************************************************************************/
