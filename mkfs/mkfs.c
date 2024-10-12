@@ -1,3 +1,39 @@
+/*************************************************************************
+ * @file mkfs.c
+ * @brief Utility to create a file system image for xv6.
+ *
+ * This program generates a file system image that is compatible with 
+ * xv6. It initializes an empty file system structure, sets up inodes, 
+ * data blocks, and directories, and copies necessary files (such as user 
+ * programs and the kernel) into the image for eXv6 to boot and run.
+ *
+ * The generated image will contain:
+ * - A superblock: Metadata about the file system, including the size, 
+ *   number of inodes, and layout of data blocks.
+ * - Inodes: Structures that store information about files and directories.
+ * - Data blocks: Storage locations that contain file contents.
+ * - Directory entries: The mapping between file names and their corresponding inodes.
+ *
+ * @usage (look in Makefile)
+ *     mkfs fs.img files...
+ * - `fs.img`: The name of the file system image to be created.
+ * - `files...`: Files to be copied into the file system (e.g., user programs).
+ *
+ * @example
+ *     mkfs fs.img user/init user/sh
+ * This creates a file system image named `fs.img` and copies the `init` 
+ * and `sh` programs into it.
+ *
+ * @note
+ * This utility is crucial for preparing a file system image that eXv6 can use. 
+ * Without a proper file system image, eXv6 will not be able to boot or 
+ * load any user programs.
+ *
+ * @author
+ * Original authors: The xv6 development team
+ * Modified by: Chris Dedman for the eXv6 project
+ *************************************************************************/
+
 #include <stdio.h>
 #include <unistd.h>
 #include <stdlib.h>
@@ -73,6 +109,9 @@ uint xint(uint x)
     return y;
 }
 
+/*
+ * Entry point of the program, initializes the file system.
+*/
 int main(int argc, char *argv[])
 {
     int i, cc, fd;
@@ -199,6 +238,9 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
+/*
+ * Writes a sector to the file system image.
+*/
 void wsect(uint sec, void *buf)
 {
     if (lseek(fsfd, sec * BSIZE, 0) != sec * BSIZE)
@@ -212,6 +254,9 @@ void wsect(uint sec, void *buf)
     }
 }
 
+/*
+ * Writes an inode to the file system.
+*/
 void winode(uint inum, struct dinode *ip)
 {
     char buf[BSIZE];
@@ -227,6 +272,9 @@ void winode(uint inum, struct dinode *ip)
     wsect(bn, buf);
 }
 
+/*
+ * Reads an inode from the file system.
+*/
 void rinode(uint inum, struct dinode *ip)
 {
     char buf[BSIZE];
@@ -240,6 +288,9 @@ void rinode(uint inum, struct dinode *ip)
     *ip = *dip;
 }
 
+/*
+ * Reads a sector from the file system image.
+*/
 void rsect(uint sec, void *buf)
 {
     if (lseek(fsfd, sec * BSIZE, 0) != sec * BSIZE)
@@ -253,6 +304,9 @@ void rsect(uint sec, void *buf)
     }
 }
 
+/*
+* Allocates an inode of the specified type.
+*/
 uint ialloc(ushort type)
 {
     uint inum = freeinode++;
@@ -268,6 +322,9 @@ uint ialloc(ushort type)
     return inum;
 }
 
+/*
+ * Allocates blocks in the file system bitmap.
+*/
 void balloc(int used)
 {
     uchar buf[BSIZE];
@@ -288,6 +345,9 @@ void balloc(int used)
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
+/*
+ * Appends data to a file's inode.
+*/
 void iappend(uint inum, void *xp, int n)
 {
     char *p = (char *)xp;
@@ -344,6 +404,9 @@ void iappend(uint inum, void *xp, int n)
     winode(inum, &din);
 }
 
+/*
+ * Handles errors by printing an error message and exiting.
+*/
 void die(const char *s)
 {
     perror(s);
