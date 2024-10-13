@@ -84,7 +84,7 @@ uint ialloc(ushort type);
 void iappend(uint inum, void *p, int n);
 void die(const char *);
 
-// convert to riscv byte order
+/* Convert to riscv byte order */
 ushort xshort(ushort x)
 {
     ushort y;
@@ -109,9 +109,7 @@ uint xint(uint x)
     return y;
 }
 
-/*
- * Entry point of the program, initializes the file system.
-*/
+/* Entry point of the program, initializes the file system. */
 int main(int argc, char *argv[])
 {
     int i, cc, fd;
@@ -238,9 +236,7 @@ int main(int argc, char *argv[])
     exit(0);
 }
 
-/*
- * Writes a sector to the file system image.
-*/
+/* Writes a sector to the file system image. */
 void wsect(uint sec, void *buf)
 {
     if (lseek(fsfd, sec * BSIZE, 0) != sec * BSIZE)
@@ -254,9 +250,7 @@ void wsect(uint sec, void *buf)
     }
 }
 
-/*
- * Writes an inode to the file system.
-*/
+/* Writes an inode to the file system. */
 void winode(uint inum, struct dinode *ip)
 {
     char buf[BSIZE];
@@ -272,9 +266,7 @@ void winode(uint inum, struct dinode *ip)
     wsect(bn, buf);
 }
 
-/*
- * Reads an inode from the file system.
-*/
+/* Reads an inode from the file system. */
 void rinode(uint inum, struct dinode *ip)
 {
     char buf[BSIZE];
@@ -288,9 +280,7 @@ void rinode(uint inum, struct dinode *ip)
     *ip = *dip;
 }
 
-/*
- * Reads a sector from the file system image.
-*/
+/* Reads a sector from the file system image. */
 void rsect(uint sec, void *buf)
 {
     if (lseek(fsfd, sec * BSIZE, 0) != sec * BSIZE)
@@ -304,9 +294,7 @@ void rsect(uint sec, void *buf)
     }
 }
 
-/*
-* Allocates an inode of the specified type.
-*/
+/* Allocates an inode of the specified type. */
 uint ialloc(ushort type)
 {
     uint inum = freeinode++;
@@ -322,9 +310,7 @@ uint ialloc(ushort type)
     return inum;
 }
 
-/*
- * Allocates blocks in the file system bitmap.
-*/
+/* Allocates blocks in the file system bitmap. */
 void balloc(int used)
 {
     uchar buf[BSIZE];
@@ -345,9 +331,7 @@ void balloc(int used)
 
 #define min(a, b) ((a) < (b) ? (a) : (b))
 
-/*
- * Appends data to a file's inode.
-*/
+/* Appends data to a file's inode. */
 void iappend(uint inum, void *xp, int n)
 {
     char *p = (char *)xp;
@@ -404,9 +388,7 @@ void iappend(uint inum, void *xp, int n)
     winode(inum, &din);
 }
 
-/*
- * Handles errors by printing an error message and exiting.
-*/
+/* Handles errors by printing an error message and exiting. */
 void die(const char *s)
 {
     perror(s);
