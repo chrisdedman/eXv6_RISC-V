@@ -21,11 +21,11 @@ static inline uint64 r_mhartid()
 }
 
 // Machine Status Register, mstatus
-#define MSTATUS_MPP_MASK (3L << 11) // Previous mode mask.
-#define MSTATUS_MPP_M (3L << 11)    // Machine mode.
-#define MSTATUS_MPP_S (1L << 11)    // Supervisor mode.
-#define MSTATUS_MPP_U (0L << 11)    // User mode.
-#define MSTATUS_MIE (1L << 3)       // Machine-mode interrupt enable.
+#define MSTATUS_MPP_MASK (3L << 11)   // Previous mode mask.
+#define MSTATUS_MPP_M    (3L << 11)   // Machine mode.
+#define MSTATUS_MPP_S    (1L << 11)   // Supervisor mode.
+#define MSTATUS_MPP_U    (0L << 11)   // User mode.
+#define MSTATUS_MIE      (1L << 3)    // Machine-mode interrupt enable.
 
 static inline uint64 r_mstatus()
 {
